@@ -27,6 +27,23 @@ try:
 except ImportError:
     pass  # get_task_logger is new in Celery 3.X
 
+
+class FakeCache(object):
+    """ Fake cache that satisfies the interface """
+    @staticmethod
+    def dummy(*args, **kwargs):
+        return None
+
+    get = dummy
+    set = dummy
+    delete = dummy
+    decr = dummy
+
+    @staticmethod
+    def incr(name):
+        return 1
+
+'''
 cache = None
 try:
     # For now, let's just say that if Django exists, we should use it.
@@ -52,6 +69,9 @@ except ImportError:
 if cache is None:
     raise Exception(
         "Jobtastic requires either Django or Flask + Memcached result backend")
+'''
+
+cache = FakeCache
 
 
 from jobtastic.states import PROGRESS  # NOQA
